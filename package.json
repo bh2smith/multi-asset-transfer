@@ -1,6 +1,6 @@
 {
   "name": "multi-asset-transfer",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A tool to build a transaction to transfer multiple assets in a single transaction from CSV.",
   "author": {
     "name": "bh2smith"
