@@ -32,6 +32,7 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "clean": "rm -rf dist",
+    "lint": "prettier --check '{src,tests}/**/*.ts'",
     "fmt": "prettier --write '{src,tests}/**/*.ts'",
     "test": "jest"
   },
