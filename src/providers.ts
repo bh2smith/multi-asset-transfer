@@ -10,6 +10,7 @@ import {
   CollectibleTokenMetaInfo,
 } from "./types";
 import { Address, erc20Abi, erc721Abi, getAddress } from "viem";
+import { normalize } from "viem/ens";
 
 export class DefaultTokenInfoProvider implements TokenInfoProvider {
   private network: Network;
@@ -48,9 +49,26 @@ export class DefaultTokenInfoProvider implements TokenInfoProvider {
     return this.network.nativeCurrency.symbol;
   }
 
-  getSelectedNetworkShortname(): string | undefined {
-    // TODO: This might not be the expected format (may need safe shortnames)
-    return this.network.name;
+  async getSelectedNetworkShortname(): Promise<string | undefined> {
+    const response = await fetch(
+      `https://raw.githubusercontent.com/ethereum-lists/chains/master/_data/chains/eip155-${this.network.chainId}.json`,
+    );
+
+    if (!response.ok) {
+      console.error(`Failed to fetch chain data: ${response.statusText}`);
+      return undefined;
+    }
+
+    const data = (await response.json()) as { shortName?: string };
+
+    if (!data.shortName) {
+      console.error(
+        `Failed to retrieve chain shortName for ${this.network.chainId}`,
+      );
+      return undefined;
+    }
+
+    return data.shortName;
   }
 }
 
@@ -94,7 +112,7 @@ export class DefaultCollectibleTokenInfoProvider
   }
 
   getFromAddress(): string {
-    throw new Error("Method not implemented.");
+    throw new Error("getFromAddress not implemented.");
   }
 
   async fetchMetaInfo(
@@ -141,11 +159,13 @@ export class DefaultCollectibleTokenInfoProvider
   }
 }
 
+const universalResolverAddress = getAddress("0x74E20Bd2A1fE0cdbe45b9A1d89cb7e0a45b36376");
+
 export class DefaultEnsResolver implements EnsResolver {
   private network: Network;
 
-  constructor() {
-    this.network = Network.fromChainId(1);
+  constructor(chainId: number) {
+    this.network = Network.fromChainId(chainId);
   }
 
   async resolveName(ensName: string): Promise<string | null> {
@@ -153,6 +173,7 @@ export class DefaultEnsResolver implements EnsResolver {
       try {
         const resolvedAddress = await this.network.client.getEnsAddress({
           name: ensName,
+          universalResolverAddress
         });
         return resolvedAddress || null;
       } catch (error) {
@@ -167,7 +188,8 @@ export class DefaultEnsResolver implements EnsResolver {
     try {
       return (
         (await this.network.client.getEnsName({
-          address: address as Address,
+          address: getAddress(address),
+          universalResolverAddress
         })) || null
       );
     } catch (error) {
@@ -178,11 +200,13 @@ export class DefaultEnsResolver implements EnsResolver {
 
   async isEnsEnabled(): Promise<boolean> {
     try {
-      return (
-        (await this.network.client.getEnsAddress({ name: "vitalik.eth" })) !==
-        null
-      );
-    } catch {
+      // TODO(bh2smith): This is mainnet resolver address
+      const vitalik = await this.network.client.getEnsAddress({
+        name: normalize("vitalik.eth"),
+        universalResolverAddress
+      });
+      return vitalik !== null;
+    } catch (error: unknown) {
       return false;
     }
   }

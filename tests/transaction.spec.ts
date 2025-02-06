@@ -1,7 +1,13 @@
-import { AssetTransfer, CollectibleTransfer, TokenInfo } from "../src/types";
+import {
+  AssetTransfer,
+  CollectibleTransfer,
+  TokenInfo,
+  Transfer,
+} from "../src/types";
 import {
   buildAssetTransfer,
   buildCollectibleTransfer,
+  buildMetaTransactions,
 } from "../src/transaction";
 import { formatUnits, parseUnits } from "viem";
 
@@ -289,6 +295,59 @@ describe("Build Transfers:", () => {
       expect(secondTransfer.data).toEqual(
         "0xf242432a0000000000000000000000000000000000000000000000000000000000005afe000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a4000000000000000000000000000000000000000000000000000000000000004500000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000",
       );
+    });
+  });
+
+  describe("buildMetaTransactions", () => {
+    it("correctly builds processes arbitrary transfers", () => {
+      const common = {
+        receiverEnsName: null,
+        receiver,
+      };
+      const transfers: Transfer[] = [
+        {
+          ...common,
+          token_type: "erc20",
+          amount: "1",
+          tokenAddress: listedToken.address,
+          decimals: listedToken.decimals,
+          symbol: "LIT",
+        },
+        {
+          ...common,
+          token_type: "erc721",
+          from: safeAddress,
+          tokenAddress: testData.addresses.dummyErc721Address,
+          tokenId: "69",
+        },
+        {
+          ...common,
+          token_type: "erc1155",
+          from: safeAddress,
+          tokenAddress: testData.addresses.dummyErc1155Address,
+          amount: "69",
+          tokenId: "420",
+        },
+      ];
+
+      const txns = buildMetaTransactions(transfers);
+      expect(txns).toStrictEqual([
+        {
+          to: "0xc778417E063141139Fce010982780140Aa0cD5Ab",
+          value: "0",
+          data: "0xa9059cbb00000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000de0b6b3a7640000",
+        },
+        {
+          to: "0x5500000000000000000000000000000000000000",
+          value: "0x00",
+          data: "0x42842e0e0000000000000000000000000000000000000000000000000000000000005afe00000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000045",
+        },
+        {
+          to: "0x88b48f654c30e99bc2e4a1559b4dcf1ad93fa656",
+          value: "0x00",
+          data: "0xf242432a0000000000000000000000000000000000000000000000000000000000005afe000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a4000000000000000000000000000000000000000000000000000000000000004500000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000",
+        },
+      ]);
     });
   });
 });

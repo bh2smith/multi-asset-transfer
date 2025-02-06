@@ -77,8 +77,8 @@ export type CollectibleTransfer = {
   from: string;
   receiver: string;
   tokenAddress: string;
-  tokenName?: string;
   tokenId: string;
+  tokenName?: string;
   amount?: string;
   receiverEnsName: string | null;
 };
@@ -94,4 +94,40 @@ export type CSVRow = {
   value?: string;
   amount?: string;
   id?: string;
+};
+
+type Token = {
+  name: string;
+  symbol: string;
+  decimals: number;
+};
+
+export type AssetBalanceEntry = {
+  tokenAddress: string | null;
+  token: Token | null;
+  balance: string;
+  decimals: number;
+};
+
+export type NFTBalanceEntry = {
+  address: string;
+  tokenName: string;
+  tokenSymbol: string;
+  id: string;
+  imageUri: string;
+  name: string;
+};
+
+export type AssetSummaryEntry = {
+  tokenAddress: string | null;
+  amount: string;
+  decimals: number;
+  symbol?: string;
+};
+
+export type CollectibleSummaryEntry = {
+  tokenAddress: string;
+  id: string;
+  count: number;
+  name?: string;
 };
