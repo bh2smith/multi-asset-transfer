@@ -1,6 +1,6 @@
 {
   "name": "multi-asset-transfer",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A tool to build a transaction to transfer multiple assets in a single transaction from CSV.",
   "author": {
     "name": "bh2smith"
@@ -32,7 +32,9 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "clean": "rm -rf dist",
-    "fmt": "prettier --write '{src,tests}/**/*.ts'"
+    "lint": "prettier --check '{src,tests}/**/*.ts'",
+    "fmt": "prettier --write '{src,tests}/**/*.ts'",
+    "test": "jest"
   },
   "devDependencies": {
     "@types/bun": "latest",

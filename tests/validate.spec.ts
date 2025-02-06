@@ -208,7 +208,7 @@ describe("Parsing CSVs ", () => {
     mockTokenInfoProvider = {
       getTokenInfo: fetchTokenFromList,
       getNativeTokenSymbol: () => "ETH",
-      getSelectedNetworkShortname: () => "eth",
+      getSelectedNetworkShortname: async () => "eth",
     };
 
     mockCollectibleTokenInfoProvider = {

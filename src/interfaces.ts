@@ -7,7 +7,7 @@ import type {
 export interface TokenInfoProvider {
   getTokenInfo: (tokenAddress: string) => Promise<MinimalTokenInfo | undefined>;
   getNativeTokenSymbol: () => string;
-  getSelectedNetworkShortname: () => string | undefined;
+  getSelectedNetworkShortname: () => Promise<string | undefined>;
 }
 
 export interface CollectibleTokenInfoProvider {

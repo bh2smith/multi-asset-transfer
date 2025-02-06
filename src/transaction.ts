@@ -15,7 +15,9 @@ export type BaseTransaction = {
   data: string;
 };
 
-export function buildMetaTransaction(transfers: Transfer[]): BaseTransaction[] {
+export function buildMetaTransactions(
+  transfers: Transfer[],
+): BaseTransaction[] {
   return transfers.map((transfer) => {
     if (["native", "erc20"].includes(transfer.token_type)) {
       return buildAssetTransfer(transfer as AssetTransfer);

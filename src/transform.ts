@@ -14,14 +14,14 @@ import type {
 } from "./types";
 import { getAddress, isAddress } from "viem";
 
-export const transform = (
+export async function transform(
   row: CSVRow,
   tokenInfoProvider: TokenInfoProvider,
   erc721InfoProvider: CollectibleTokenInfoProvider,
   ensResolver: EnsResolver,
-): Promise<Transfer | UnknownTransfer> => {
+): Promise<Transfer | UnknownTransfer> {
   const selectedChainShortname =
-    tokenInfoProvider.getSelectedNetworkShortname();
+    await tokenInfoProvider.getSelectedNetworkShortname();
 
   const trimmedReceiver = trimMatchingNetwork(
     row.receiver,
@@ -58,15 +58,15 @@ export const transform = (
         ensResolver,
       );
   }
-};
+}
 
-const transformAsset = (
+async function transformAsset(
   row: Omit<CSVRow, "token_type"> & { token_type: "erc20" | "native" },
   tokenInfoProvider: TokenInfoProvider,
   ensResolver: EnsResolver,
-): Promise<Transfer> => {
+): Promise<Transfer> {
   const selectedChainShortname =
-    tokenInfoProvider.getSelectedNetworkShortname();
+    await tokenInfoProvider.getSelectedNetworkShortname();
   const prePayment: PrePayment = {
     // avoids errors from getAddress. Invalid addresses are later caught in validateRow
     tokenAddress: transformERC20TokenAddress(row.token_address),
@@ -78,7 +78,7 @@ const transformAsset = (
   };
 
   return toPayment(prePayment, tokenInfoProvider, ensResolver);
-};
+}
 
 /**
  * Transforms each row into a payment object.
