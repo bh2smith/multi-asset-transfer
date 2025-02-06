@@ -19,7 +19,7 @@ export const assetTransfersToSummary = (transfers: AssetTransfer[]) => {
         previousValue.set(currentValue.tokenAddress, tokenSummary);
       }
       tokenSummary.amount = (
-        BigInt(tokenSummary.amount) + BigInt(currentValue.amount)
+        Number(tokenSummary.amount) + Number(currentValue.amount)
       ).toString();
 
       return previousValue;

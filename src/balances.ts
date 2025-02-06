@@ -19,11 +19,11 @@ export type InsufficientBalanceInfo = {
   id?: string;
 };
 
-export const checkAllBalances = (
+export function checkAllBalances(
   assetBalance: AssetBalanceEntry[] | undefined,
   collectibleBalance: NFTBalanceEntry[] | undefined,
   transfers: Transfer[],
-): InsufficientBalanceInfo[] => {
+): InsufficientBalanceInfo[] {
   const insufficientTokens: InsufficientBalanceInfo[] = [];
 
   const assetSummary = assetTransfersToSummary(
@@ -107,7 +107,7 @@ export const checkAllBalances = (
   }
 
   return insufficientTokens;
-};
+}
 
 const isSufficientBalance = (
   tokenBalance: bigint,
