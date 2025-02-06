@@ -159,7 +159,9 @@ export class DefaultCollectibleTokenInfoProvider
   }
 }
 
-const universalResolverAddress = getAddress("0x74E20Bd2A1fE0cdbe45b9A1d89cb7e0a45b36376");
+const universalResolverAddress = getAddress(
+  "0x74E20Bd2A1fE0cdbe45b9A1d89cb7e0a45b36376",
+);
 
 export class DefaultEnsResolver implements EnsResolver {
   private network: Network;
@@ -173,7 +175,7 @@ export class DefaultEnsResolver implements EnsResolver {
       try {
         const resolvedAddress = await this.network.client.getEnsAddress({
           name: ensName,
-          universalResolverAddress
+          universalResolverAddress,
         });
         return resolvedAddress || null;
       } catch (error) {
@@ -189,7 +191,7 @@ export class DefaultEnsResolver implements EnsResolver {
       return (
         (await this.network.client.getEnsName({
           address: getAddress(address),
-          universalResolverAddress
+          universalResolverAddress,
         })) || null
       );
     } catch (error) {
@@ -203,7 +205,7 @@ export class DefaultEnsResolver implements EnsResolver {
       // TODO(bh2smith): This is mainnet resolver address
       const vitalik = await this.network.client.getEnsAddress({
         name: normalize("vitalik.eth"),
-        universalResolverAddress
+        universalResolverAddress,
       });
       return vitalik !== null;
     } catch (error: unknown) {

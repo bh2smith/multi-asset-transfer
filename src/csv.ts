@@ -36,7 +36,7 @@ export function defaultParser(
   const collectibleTokenInfoProvider = new DefaultCollectibleTokenInfoProvider(
     chainId,
   );
-  const ensResolver = new DefaultEnsResolver();
+  const ensResolver = new DefaultEnsResolver(chainId);
   return (csvText: string) =>
     parseCsv(
       csvText,

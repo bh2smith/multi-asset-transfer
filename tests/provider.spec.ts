@@ -85,17 +85,20 @@ describe("Default Providers:", () => {
 
     it("lookupAddress success", async () => {
       const mainnetProvider = new DefaultEnsResolver(1);
-      const name = await mainnetProvider.lookupAddress("0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
+      const name = await mainnetProvider.lookupAddress(
+        "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+      );
       expect(name).toBe("vitalik.eth");
-
-      
     });
 
     it("lookupAddress fails", async () => {
       const mainnetProvider = new DefaultEnsResolver(1);
-      expect(await mainnetProvider.lookupAddress("0xdead6BF26964aF9D7eEd9e03E53415D37aA96045")).toBe(null);
+      expect(
+        await mainnetProvider.lookupAddress(
+          "0xdead6BF26964aF9D7eEd9e03E53415D37aA96045",
+        ),
+      ).toBe(null);
     });
-
 
     it("resolveName success", async () => {
       const mainnetProvider = new DefaultEnsResolver(1);
