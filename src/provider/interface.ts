@@ -1,7 +1,7 @@
-import type {
-  CollectibleTokenInfo,
+import {
   CollectibleTokenMetaInfo,
   MinimalTokenInfo,
+  CollectibleTokenInfo,
 } from "./types";
 
 export interface TokenInfoProvider {

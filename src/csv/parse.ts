@@ -2,16 +2,17 @@ import type {
   TokenInfoProvider,
   CollectibleTokenInfoProvider,
   EnsResolver,
-} from "./interfaces";
-import type { CSVRow, Transfer, UnknownTransfer, CodeWarning } from "./types";
-import { parse, type ParseError } from "papaparse";
-import { validateHeaders, validateRow } from "./validate";
-import { transform } from "./transform";
+} from "../provider";
 import {
   DefaultTokenInfoProvider,
   DefaultCollectibleTokenInfoProvider,
   DefaultEnsResolver,
-} from "./providers";
+} from "../provider";
+import type { CSVRow, CodeWarning } from "./common";
+import type { Transfer, UnknownTransfer } from "./transfer";
+import { parse, type ParseError } from "papaparse";
+import { validateHeaders, validateRow } from "./validate";
+import { transform } from "./transform";
 
 const countLines = (text: string) => text.split(/\r\n|\r|\n/).length;
 

@@ -1,10 +1,6 @@
 import { parseUnits } from "viem";
-import {
-  AssetTransfer,
-  assetTransfersToSummary,
-  checkAllBalances,
-  CollectibleTransfer,
-} from "../src";
+import { assetTransfersToSummary, checkAllBalances } from "../../src/balance";
+import { AssetTransfer, CollectibleTransfer } from "../../src/csv";
 
 const unlistedERC20Token = {
   address: "0x6b175474e89094c44da98b954eedeac495271d0f",

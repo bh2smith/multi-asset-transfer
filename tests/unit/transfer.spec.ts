@@ -1,14 +1,12 @@
-import {
-  AssetTransfer,
-  CollectibleTransfer,
-  TokenInfo,
-  Transfer,
-} from "../src/types";
+import { TokenInfo } from "../../src/provider";
 import {
   buildAssetTransfer,
   buildCollectibleTransfer,
   buildMetaTransactions,
-} from "../src/transaction";
+  Transfer,
+  AssetTransfer,
+  CollectibleTransfer,
+} from "../../src/csv";
 import { formatUnits, parseUnits } from "viem";
 
 const MAX_U256 = BigInt(

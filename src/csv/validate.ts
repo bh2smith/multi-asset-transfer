@@ -1,11 +1,11 @@
 import { isAddress } from "viem";
+import type { CodeWarning } from "./common";
 import type {
   AssetTransfer,
-  CodeWarning,
   CollectibleTransfer,
   Transfer,
   UnknownTransfer,
-} from "./types";
+} from "./transfer";
 
 enum HEADER_FIELDS {
   TYPE = "token_type",

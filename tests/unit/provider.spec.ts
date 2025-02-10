@@ -2,7 +2,7 @@ import {
   DefaultCollectibleTokenInfoProvider,
   DefaultEnsResolver,
   DefaultTokenInfoProvider,
-} from "../src/providers";
+} from "../../src/provider";
 
 describe("Default Providers:", () => {
   const chainId = 11155111;

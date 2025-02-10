@@ -6,7 +6,36 @@ import {
   parseAbi,
   parseUnits,
 } from "viem";
-import { AssetTransfer, CollectibleTransfer, Transfer } from "./types";
+
+export type Transfer = AssetTransfer | CollectibleTransfer;
+export type AssetTokenType = "erc20" | "native";
+export type CollectibleTokenType = "erc721" | "erc1155";
+
+export type AssetTransfer = {
+  token_type: AssetTokenType;
+  receiver: string;
+  amount: string;
+  tokenAddress: string | null;
+  decimals: number;
+  symbol?: string;
+  receiverEnsName: string | null;
+  position?: number;
+};
+
+export type CollectibleTransfer = {
+  token_type: CollectibleTokenType;
+  from: string;
+  receiver: string;
+  tokenAddress: string;
+  tokenId: string;
+  tokenName?: string;
+  amount?: string;
+  receiverEnsName: string | null;
+};
+
+export type UnknownTransfer = {
+  token_type: "unknown";
+};
 
 // TODO: import from somewhere (safesdk?)
 export type BaseTransaction = {

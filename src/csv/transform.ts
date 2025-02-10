@@ -2,16 +2,14 @@ import type {
   CollectibleTokenInfoProvider,
   EnsResolver,
   TokenInfoProvider,
-} from "./interfaces";
+} from "../provider";
+import type { CSVRow } from "./common";
 import type {
   Transfer,
-  UnknownTransfer,
-  CSVRow,
-  PreCollectibleTransfer,
-  PrePayment,
   AssetTransfer,
   CollectibleTransfer,
-} from "./types";
+  UnknownTransfer,
+} from "./transfer";
 import { getAddress, isAddress } from "viem";
 
 export async function transform(
@@ -260,3 +258,18 @@ const trimMatchingNetwork = (address: string, selectedPrefix?: string) => {
  */
 const normalizeAddress = (address: string) =>
   isAddress(address) ? getAddress(address) : address;
+
+type PreCollectibleTransfer = {
+  receiver: string;
+  tokenId: string;
+  tokenAddress: string;
+  tokenType: "nft";
+  amount?: string;
+};
+
+type PrePayment = {
+  receiver: string;
+  amount: string;
+  tokenAddress: string | null;
+  tokenType: "erc20" | "native";
+};
