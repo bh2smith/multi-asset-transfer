@@ -1,16 +1,16 @@
 import { Network } from "near-ca";
+import { Address, erc20Abi, erc721Abi, getAddress } from "viem";
+import { normalize } from "viem/ens";
 import {
   CollectibleTokenInfoProvider,
   EnsResolver,
   TokenInfoProvider,
-} from "./interfaces";
+} from "./interface";
 import {
-  MinimalTokenInfo,
   CollectibleTokenInfo,
   CollectibleTokenMetaInfo,
+  MinimalTokenInfo,
 } from "./types";
-import { Address, erc20Abi, erc721Abi, getAddress } from "viem";
-import { normalize } from "viem/ens";
 
 export class DefaultTokenInfoProvider implements TokenInfoProvider {
   private network: Network;

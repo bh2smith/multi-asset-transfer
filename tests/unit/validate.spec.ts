@@ -1,4 +1,4 @@
-import { parseCsv } from "../src";
+import { parseCsv } from "../../src";
 
 import {
   AssetTransfer,
@@ -9,12 +9,12 @@ import {
   TokenInfo,
   TokenMap,
   Transfer,
-} from "../src/types";
+} from "../../src/types";
 import {
   CollectibleTokenInfoProvider,
   EnsResolver,
   TokenInfoProvider,
-} from "../src/interfaces";
+} from "../../src/interfaces";
 import { getAddress } from "viem";
 
 const dummySafeInfo = {

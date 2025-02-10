@@ -3,13 +3,8 @@ import {
   assetTransfersToSummary,
   collectibleTransfersToSummary,
 } from "./summary";
-import {
-  AssetBalanceEntry,
-  AssetTransfer,
-  CollectibleTransfer,
-  NFTBalanceEntry,
-  Transfer,
-} from "./types";
+import { AssetTransfer, CollectibleTransfer, Transfer } from "../csv";
+import { AssetBalance, NFTBalanceEntry } from "./types";
 
 export type InsufficientBalanceInfo = {
   token: string;
@@ -20,7 +15,7 @@ export type InsufficientBalanceInfo = {
 };
 
 export function checkAllBalances(
-  assetBalance: AssetBalanceEntry[] | undefined,
+  assetBalance: AssetBalance | undefined,
   collectibleBalance: NFTBalanceEntry[] | undefined,
   transfers: Transfer[],
 ): InsufficientBalanceInfo[] {
