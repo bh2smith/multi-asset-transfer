@@ -19,7 +19,27 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+
+    "noImplicitAny": true, /* Enable error reporting for expressions and declarations with an implied 'any' type. */
+    "strictNullChecks": true, /* When type checking, take into account 'null' and 'undefined'. */
+    "strictFunctionTypes": true, /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
+    "strictBindCallApply": true, /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
+    "strictPropertyInitialization": true, /* Check for class properties that are declared but not set in the constructor. */
+    "noImplicitThis": true, /* Enable error reporting when 'this' is given the type 'any'. */
+    "useUnknownInCatchVariables": true, /* Default catch clause variables as 'unknown' instead of 'any'. */
+    "alwaysStrict": true, /* Ensure 'use strict' is always emitted. */
+    "noImplicitReturns": true, /* Enable error reporting for codepaths that do not explicitly return in a function. */
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": false, // This is actually loose.
+
+    // New Strict Settings
+    "allowUnreachableCode": false,                       /* Error on unreachable code */
+    "allowUnusedLabels": false,                          /* Error on unused labels */
+    "noImplicitOverride": true,                          /* Ensure overriding members are marked with override modifier */
+    "noEmitOnError": true,                               /* Do not emit outputs if any errors were reported */
+    "isolatedModules": true,                             /* Ensure each file can be safely transpiled without relying on other imports */
+    // "exactOptionalPropertyTypes": true, /* Interpret optional property types as written, rather than adding 'undefined'. */
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "test"]
