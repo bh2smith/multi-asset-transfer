@@ -1,20 +1,21 @@
 import { parseCsv } from "../../src";
-
-import {
+import type {
   AssetTransfer,
   CodeWarning,
-  CollectibleTokenInfo,
   CollectibleTransfer,
+  Transfer,
+} from "../../src/csv";
+import {
+  CollectibleTokenInfo,
   MinimalTokenInfo,
   TokenInfo,
   TokenMap,
-  Transfer,
-} from "../../src/types";
+} from "../../src/provider";
 import {
   CollectibleTokenInfoProvider,
   EnsResolver,
   TokenInfoProvider,
-} from "../../src/interfaces";
+} from "../../src/provider";
 import { getAddress } from "viem";
 
 const dummySafeInfo = {
@@ -69,6 +70,7 @@ function tokenMap(tokenList: TokenInfo[]): TokenMap {
   return res;
 }
 
+// TODO(bh2smith): Migrate into src/ and replace from
 export const fetchTokenList = async (chainId: number): Promise<TokenMap> => {
   let tokens: TokenInfo[];
   switch (chainId) {
