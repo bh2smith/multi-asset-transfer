@@ -1,5 +1,5 @@
 import { Network } from "near-ca";
-import { Address, erc20Abi, erc721Abi, getAddress } from "viem";
+import { Address, erc20Abi, erc721Abi, getAddress, zeroAddress } from "viem";
 import { normalize } from "viem/ens";
 import {
   CollectibleTokenInfoProvider,
@@ -112,7 +112,9 @@ export class DefaultCollectibleTokenInfoProvider
   }
 
   getFromAddress(): string {
-    throw new Error("getFromAddress not implemented.");
+    // TODO(maybe): make it possible to pass something here
+    // throw new Error("getFromAddress not implemented.");
+    return zeroAddress;
   }
 
   async fetchMetaInfo(

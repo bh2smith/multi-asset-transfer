@@ -1,3 +1,4 @@
+import { zeroAddress } from "viem";
 import {
   DefaultCollectibleTokenInfoProvider,
   DefaultEnsResolver,
@@ -63,9 +64,8 @@ describe("Default Providers:", () => {
 
     it("getFromAddress", async () => {
       const provider = new DefaultCollectibleTokenInfoProvider(chainId);
-      expect(() => provider.getFromAddress()).toThrow(
-        "getFromAddress not implemented.",
-      );
+      const from = await provider.getFromAddress();
+      expect(from).toBe(zeroAddress);
     });
   });
 

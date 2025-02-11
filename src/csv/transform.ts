@@ -10,7 +10,7 @@ import type {
   CollectibleTransfer,
   UnknownTransfer,
 } from "./transfer";
-import { getAddress, isAddress } from "viem";
+import { getAddress, isAddress, zeroAddress } from "viem";
 
 export async function transform(
   row: CSVRow,
@@ -164,7 +164,13 @@ const toCollectibleTransfer = async (
   collectibleTokenInfoProvider: CollectibleTokenInfoProvider,
   ensResolver: EnsResolver,
 ): Promise<CollectibleTransfer> => {
-  const fromAddress = collectibleTokenInfoProvider.getFromAddress();
+  let fromAddress: string = zeroAddress;
+  try {
+    // safe-airdrop uses mounted safe.safeAddress.
+    fromAddress = collectibleTokenInfoProvider.getFromAddress();
+  } catch {
+    // If safe not mounted. Fetch token Owner or just keep zeroAddress.
+  }
 
   const [resolvedReceiverAddress, receiverEnsName] =
     await resolveReceiverAddress(preCollectible.receiver, ensResolver);
