@@ -10,7 +10,7 @@ describe("Default Providers:", () => {
   const safeAddress = "0x54F08c27e75BeA0cdDdb8aA9D69FD61551B19BbA";
   describe("DefaultTokenInfoProvider", () => {
     it("constructor", async () => {
-      // const ft = await getFungibleBalance(chainId, safeAddress);
+      // console.log(await getFungibleBalance(137, safeAddress, true, true));
       const ft = [
         {
           tokenAddress: null,
@@ -51,7 +51,7 @@ describe("Default Providers:", () => {
           balance: "124928",
         },
       ];
-      // const nft = await getCollectibleBalance(chainId, safeAddress);
+      // const nft = await getCollectibleBalance(137, safeAddress, true, true);
       const nft = [];
 
       const csv = drainSafe(safeAddress, { ft, nft });
