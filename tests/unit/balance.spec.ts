@@ -1,6 +1,11 @@
 import { parseUnits } from "viem";
-import { assetTransfersToSummary, checkAllBalances } from "../../src/balance";
-import { AssetTransfer, CollectibleTransfer } from "../../src/csv";
+import {
+  assetTransfersToSummary,
+  checkAllBalances,
+  InsufficientBalanceInfo,
+} from "../../src/balance";
+import { AssetTransfer, CollectibleTransfer, Transfer } from "../../src/csv";
+import { AssetBalance, NFTBalanceEntry } from "../../src/balance/types";
 
 const unlistedERC20Token = {
   address: "0x6b175474e89094c44da98b954eedeac495271d0f",
@@ -35,6 +40,19 @@ export const testData = {
   dummyERC1155Token,
 };
 
+function checkNFTBalance(
+  nftBalance: NFTBalanceEntry[],
+  transfers: Transfer[],
+): InsufficientBalanceInfo[] {
+  return checkAllBalances(undefined, nftBalance, transfers);
+}
+
+function checkFTBalance(
+  ftBalance: AssetBalance,
+  transfers: Transfer[],
+): InsufficientBalanceInfo[] {
+  return checkAllBalances(ftBalance, undefined, transfers);
+}
 describe("transferToSummary and check balances", () => {
   it("works for integer native currency", () => {
     const transfers: AssetTransfer[] = [
@@ -94,17 +112,9 @@ describe("transferToSummary and check balances", () => {
       },
     ];
 
-    expect(checkAllBalances(exactBalance, undefined, transfers)).toHaveLength(
-      0,
-    );
-    expect(checkAllBalances(biggerBalance, undefined, transfers)).toHaveLength(
-      0,
-    );
-    const smallBalanceCheckResult = checkAllBalances(
-      smallerBalance,
-      undefined,
-      transfers,
-    );
+    expect(checkFTBalance(exactBalance, transfers)).toHaveLength(0);
+    expect(checkFTBalance(biggerBalance, transfers)).toHaveLength(0);
+    const smallBalanceCheckResult = checkFTBalance(smallerBalance, transfers);
     expect(smallBalanceCheckResult).toHaveLength(1);
     expect(smallBalanceCheckResult[0].token).toEqual("ETH");
     expect(smallBalanceCheckResult[0].token_type).toEqual("native");
@@ -169,17 +179,9 @@ describe("transferToSummary and check balances", () => {
       },
     ];
 
-    expect(checkAllBalances(exactBalance, undefined, transfers)).toHaveLength(
-      0,
-    );
-    expect(checkAllBalances(biggerBalance, undefined, transfers)).toHaveLength(
-      0,
-    );
-    const smallBalanceCheckResult = checkAllBalances(
-      smallerBalance,
-      undefined,
-      transfers,
-    );
+    expect(checkFTBalance(exactBalance, transfers)).toHaveLength(0);
+    expect(checkFTBalance(biggerBalance, transfers)).toHaveLength(0);
+    const smallBalanceCheckResult = checkFTBalance(smallerBalance, transfers);
     expect(smallBalanceCheckResult).toHaveLength(1);
     expect(smallBalanceCheckResult[0].token).toEqual("ETH");
     expect(smallBalanceCheckResult[0].token_type).toEqual("native");
@@ -258,17 +260,9 @@ describe("transferToSummary and check balances", () => {
       },
     ];
 
-    expect(checkAllBalances(exactBalance, undefined, transfers)).toHaveLength(
-      0,
-    );
-    expect(checkAllBalances(biggerBalance, undefined, transfers)).toHaveLength(
-      0,
-    );
-    const smallBalanceCheckResult = checkAllBalances(
-      smallerBalance,
-      undefined,
-      transfers,
-    );
+    expect(checkFTBalance(exactBalance, transfers)).toHaveLength(0);
+    expect(checkFTBalance(biggerBalance, transfers)).toHaveLength(0);
+    const smallBalanceCheckResult = checkFTBalance(smallerBalance, transfers);
     expect(smallBalanceCheckResult).toHaveLength(1);
     expect(smallBalanceCheckResult[0].token).toEqual("ULT");
     expect(smallBalanceCheckResult[0].token_type).toEqual("erc20");
@@ -347,17 +341,9 @@ describe("transferToSummary and check balances", () => {
       },
     ];
 
-    expect(checkAllBalances(exactBalance, undefined, transfers)).toHaveLength(
-      0,
-    );
-    expect(checkAllBalances(biggerBalance, undefined, transfers)).toHaveLength(
-      0,
-    );
-    const smallBalanceCheckResult = checkAllBalances(
-      smallerBalance,
-      undefined,
-      transfers,
-    );
+    expect(checkFTBalance(exactBalance, transfers)).toHaveLength(0);
+    expect(checkFTBalance(biggerBalance, transfers)).toHaveLength(0);
+    const smallBalanceCheckResult = checkFTBalance(smallerBalance, transfers);
     expect(smallBalanceCheckResult).toHaveLength(1);
     expect(smallBalanceCheckResult[0].token).toEqual("ULT");
     expect(smallBalanceCheckResult[0].token_type).toEqual("erc20");
@@ -492,17 +478,9 @@ describe("transferToSummary and check balances", () => {
       },
     ];
 
-    expect(checkAllBalances(exactBalance, undefined, transfers)).toHaveLength(
-      0,
-    );
-    expect(checkAllBalances(biggerBalance, undefined, transfers)).toHaveLength(
-      0,
-    );
-    const smallBalanceCheckResult = checkAllBalances(
-      smallerBalance,
-      undefined,
-      transfers,
-    );
+    expect(checkFTBalance(exactBalance, transfers)).toHaveLength(0);
+    expect(checkFTBalance(biggerBalance, transfers)).toHaveLength(0);
+    const smallBalanceCheckResult = checkFTBalance(smallerBalance, transfers);
     expect(smallBalanceCheckResult).toHaveLength(2);
     expect(smallBalanceCheckResult[0].token).toEqual("ULT");
     expect(smallBalanceCheckResult[0].token_type).toEqual("erc20");
@@ -514,9 +492,8 @@ describe("transferToSummary and check balances", () => {
     expect(smallBalanceCheckResult[1].transferAmount).toEqual("3.33");
     expect(smallBalanceCheckResult[1].isDuplicate).toBeFalsy();
 
-    const lessNativeMoreErc20CheckResult = checkAllBalances(
+    const lessNativeMoreErc20CheckResult = checkFTBalance(
       lessNativeMoreErc20,
-      undefined,
       transfers,
     );
     expect(lessNativeMoreErc20CheckResult).toHaveLength(1);
@@ -618,14 +595,9 @@ describe("transferToSummary and check balances", () => {
       previous: null,
     };
 
-    expect(
-      checkAllBalances(undefined, exactBalance.results, transfers),
-    ).toHaveLength(0);
-    expect(
-      checkAllBalances(undefined, biggerBalance.results, transfers),
-    ).toHaveLength(0);
-    const smallBalanceCheckResult = checkAllBalances(
-      undefined,
+    expect(checkNFTBalance(exactBalance.results, transfers)).toHaveLength(0);
+    expect(checkNFTBalance(biggerBalance.results, transfers)).toHaveLength(0);
+    const smallBalanceCheckResult = checkNFTBalance(
       smallerBalance.results,
       transfers,
     );
