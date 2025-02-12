@@ -3,7 +3,7 @@ import { AssetBalance, NFTBalanceEntry } from "./balance/types";
 
 export function drainSafe(
   to: Address,
-  balances: { ft: AssetBalance; nft: NFTBalanceEntry[] },
+  balances: { ft?: AssetBalance; nft?: NFTBalanceEntry[] },
 ): string {
   let drainCSV = "token_type,token_address,receiver,amount,id";
 
@@ -24,7 +24,7 @@ export function drainSafe(
       }
     });
 
-    balances.nft.forEach(({ address, id }) => {
+    balances.nft?.forEach(({ address, id }) => {
       drainCSV += `\nnft,${address},${to},,${id}`;
     });
   }

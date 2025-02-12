@@ -2,14 +2,13 @@ type Token = {
   name: string;
   symbol: string;
   decimals: number;
+  logoUri?: string;
 };
 
 export type AssetBalanceEntry = {
   tokenAddress: string | null;
   token: Token | null;
   balance: string;
-  // TODO(bh2smith): We have decimals in two places!
-  decimals: number;
 };
 
 export type NFTBalanceEntry = {

@@ -45,7 +45,7 @@ function getCollectiblesURL(
   previousPageData?: NFTBalance,
 ): string | null {
   if (pageIndex === 0) {
-    return `${safeTxServiceUrlFor(chainId)}/api/v2/safes/${safeAddress}/collectibles?trusted=false&exclude_spam=true&limit=10`;
+    return `${safeTxServiceUrlFor(chainId)}/api/v2/safes/${safeAddress}/collectibles?trusted=true&exclude_spam=true&limit=10`;
   }
   if (previousPageData && !previousPageData.next) return null;
   return previousPageData?.next || null; // Next page URL

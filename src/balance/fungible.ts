@@ -5,7 +5,7 @@ export async function getFungibleBalance(
   chainId: number,
   safeAddress: string,
 ): Promise<AssetBalanceEntry[] | undefined> {
-  const endpoint = `${safeTxServiceUrlFor(chainId)}/api/v1/safes/${safeAddress}/balances?trusted=false&exclude_spam=true`;
+  const endpoint = `${safeTxServiceUrlFor(chainId)}/api/v1/safes/${safeAddress}/balances?trusted=true&exclude_spam=true`;
 
   const response = await fetch(endpoint);
   if (!response.ok) {
