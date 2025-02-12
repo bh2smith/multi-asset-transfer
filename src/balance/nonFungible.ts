@@ -6,6 +6,8 @@ const COLLECTIBLE_MAX_PAGES = 10;
 export async function getCollectibleBalance(
   chainId: number,
   safeAddress: string,
+  trusted: boolean = false,
+  exclude_spam: boolean = true,
 ): Promise<NFTBalanceEntry[]> {
   let pageIndex = 0;
   let allCollectibles: NFTBalanceEntry[] = [];
@@ -13,6 +15,8 @@ export async function getCollectibleBalance(
     chainId,
     safeAddress,
     pageIndex,
+    trusted,
+    exclude_spam,
   );
 
   while (nextUrl && pageIndex < COLLECTIBLE_MAX_PAGES) {
@@ -42,10 +46,13 @@ function getCollectiblesURL(
   chainId: number,
   safeAddress: string,
   pageIndex: number,
+  trusted: boolean = false,
+  exclude_spam: boolean = true,
   previousPageData?: NFTBalance,
 ): string | null {
+  const params = `trusted=${trusted}&exclude_spam=${exclude_spam}&limit=10`;
   if (pageIndex === 0) {
-    return `${safeTxServiceUrlFor(chainId)}/api/v2/safes/${safeAddress}/collectibles?trusted=false&exclude_spam=true&limit=10`;
+    return `${safeTxServiceUrlFor(chainId)}/api/v2/safes/${safeAddress}/collectibles?${params}`;
   }
   if (previousPageData && !previousPageData.next) return null;
   return previousPageData?.next || null; // Next page URL
