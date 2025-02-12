@@ -8,6 +8,7 @@ export type AssetBalanceEntry = {
   tokenAddress: string | null;
   token: Token | null;
   balance: string;
+  // TODO(bh2smith): We have decimals in two places!
   decimals: number;
 };
 
