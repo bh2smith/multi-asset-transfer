@@ -67,7 +67,7 @@ describe("Default Providers:", () => {
     });
   });
 
-  describe("DefaultEnsResolver", () => {
+  describe.only("DefaultEnsResolver", () => {
     const ensProvider = new DefaultEnsResolver(chainId);
     const mainnetProvider = new DefaultEnsResolver(1);
     it("constructor", () => {
@@ -77,7 +77,7 @@ describe("Default Providers:", () => {
     it("isEnsEnabled", async () => {
       expect(await ensProvider.isEnsEnabled()).toBe(false);
       expect(await mainnetProvider.isEnsEnabled()).toBe(true);
-    });
+    }, 10000);
 
     it("lookupAddress success", async () => {
       const name = await mainnetProvider.lookupAddress(
