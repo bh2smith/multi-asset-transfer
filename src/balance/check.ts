@@ -1,4 +1,3 @@
-import { parseUnits } from "viem";
 import {
   assetTransfersToSummary,
   collectibleTransfersToSummary,
@@ -35,12 +34,7 @@ export function checkAllBalances(
     ) as CollectibleTransfer[],
   );
 
-  for (const {
-    tokenAddress,
-    amount,
-    decimals,
-    symbol,
-  } of assetSummary.values()) {
+  for (const { tokenAddress, amount, symbol } of assetSummary.values()) {
     if (tokenAddress === null) {
       // Check ETH Balance
       const tokenBalance = assetBalance?.find(
@@ -49,7 +43,7 @@ export function checkAllBalances(
 
       if (
         typeof tokenBalance === "undefined" ||
-        !isSufficientBalance(BigInt(tokenBalance.balance), amount, 18)
+        !isSufficientBalance(BigInt(tokenBalance.balance), BigInt(amount))
       ) {
         insufficientTokens.push({
           token: tokenBalance?.token?.symbol || "ETH",
@@ -66,7 +60,7 @@ export function checkAllBalances(
       );
       if (
         typeof tokenBalance === "undefined" ||
-        !isSufficientBalance(BigInt(tokenBalance.balance), amount, decimals)
+        !isSufficientBalance(BigInt(tokenBalance.balance), BigInt(amount))
       ) {
         insufficientTokens.push({
           token: symbol || tokenAddress,
@@ -104,10 +98,6 @@ export function checkAllBalances(
   return insufficientTokens;
 }
 
-const isSufficientBalance = (
-  tokenBalance: bigint,
-  transferAmount: string,
-  decimals: number,
-) => {
-  return BigInt(tokenBalance) >= parseUnits(transferAmount, decimals);
+const isSufficientBalance = (tokenBalance: bigint, transferAmount: bigint) => {
+  return BigInt(tokenBalance) >= transferAmount;
 };

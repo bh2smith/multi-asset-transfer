@@ -1,4 +1,4 @@
-import { formatUnits, parseUnits } from "viem";
+import { parseUnits } from "viem";
 import { AssetTransfer, CollectibleTransfer } from "../csv";
 import { AssetSummaryEntry, CollectibleSummaryEntry } from "./types";
 
@@ -19,10 +19,8 @@ export function assetTransfersToSummary(
       };
       previousValue.set(currentValue.tokenAddress, tokenSummary);
     }
-    tokenSummary.amount = formatUnits(
-      parseUnits(tokenSummary.amount, decimals) +
-        parseUnits(currentValue.amount, decimals),
-      decimals,
+    tokenSummary.amount = (
+      BigInt(tokenSummary.amount) + parseUnits(currentValue.amount, decimals)
     ).toString();
 
     return previousValue;
