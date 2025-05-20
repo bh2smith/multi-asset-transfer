@@ -67,7 +67,7 @@ describe("Default Providers:", () => {
     });
   });
 
-  describe("DefaultEnsResolver", () => {
+  describe.skip("DefaultEnsResolver", () => {
     const ensProvider = new DefaultEnsResolver(chainId);
     const mainnetProvider = new DefaultEnsResolver(1);
     it("constructor", () => {

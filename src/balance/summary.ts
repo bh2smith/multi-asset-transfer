@@ -1,3 +1,4 @@
+import { parseUnits } from "viem";
 import { AssetTransfer, CollectibleTransfer } from "../csv";
 import { AssetSummaryEntry, CollectibleSummaryEntry } from "./types";
 
@@ -7,18 +8,19 @@ export function assetTransfersToSummary(
   transfers: AssetTransfer[],
 ): FungibleSummary {
   return transfers.reduce((previousValue, currentValue): FungibleSummary => {
-    let tokenSummary = previousValue.get(currentValue.tokenAddress);
+    const { tokenAddress, decimals, symbol } = currentValue;
+    let tokenSummary = previousValue.get(tokenAddress);
     if (typeof tokenSummary === "undefined") {
       tokenSummary = {
-        tokenAddress: currentValue.tokenAddress,
+        tokenAddress,
         amount: "0",
-        decimals: currentValue.decimals,
-        symbol: currentValue.symbol,
+        decimals,
+        symbol,
       };
       previousValue.set(currentValue.tokenAddress, tokenSummary);
     }
     tokenSummary.amount = (
-      Number(tokenSummary.amount) + Number(currentValue.amount)
+      BigInt(tokenSummary.amount) + parseUnits(currentValue.amount, decimals)
     ).toString();
 
     return previousValue;

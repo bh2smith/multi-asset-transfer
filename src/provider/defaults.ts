@@ -1,5 +1,11 @@
-import { Network } from "near-ca";
-import { Address, erc20Abi, erc721Abi, getAddress, zeroAddress } from "viem";
+import {
+  Address,
+  erc20Abi,
+  erc721Abi,
+  getAddress,
+  PublicClient,
+  zeroAddress,
+} from "viem";
 import { normalize } from "viem/ens";
 import {
   CollectibleTokenInfoProvider,
@@ -11,12 +17,13 @@ import {
   CollectibleTokenMetaInfo,
   MinimalTokenInfo,
 } from "./types";
+import { getPublicClient } from "./network";
 
 export class DefaultTokenInfoProvider implements TokenInfoProvider {
-  private network: Network;
+  private client: PublicClient;
 
   constructor(chainId: number) {
-    this.network = Network.fromChainId(chainId);
+    this.client = getPublicClient(chainId);
   }
 
   async getTokenInfo(
@@ -24,14 +31,13 @@ export class DefaultTokenInfoProvider implements TokenInfoProvider {
   ): Promise<MinimalTokenInfo | undefined> {
     try {
       const address = getAddress(tokenAddress);
-      const client = this.network.client;
       const [symbol, decimals] = await Promise.all([
-        client.readContract({
+        this.client.readContract({
           address,
           abi: erc20Abi,
           functionName: "symbol",
         }),
-        client.readContract({
+        this.client.readContract({
           address,
           abi: erc20Abi,
           functionName: "decimals",
@@ -46,12 +52,13 @@ export class DefaultTokenInfoProvider implements TokenInfoProvider {
   }
 
   getNativeTokenSymbol(): string {
-    return this.network.nativeCurrency.symbol;
+    // constructor ensures chain is defined.
+    return this.client.chain!.nativeCurrency.symbol;
   }
 
   async getSelectedNetworkShortname(): Promise<string | undefined> {
     const response = await fetch(
-      `https://raw.githubusercontent.com/ethereum-lists/chains/master/_data/chains/eip155-${this.network.chainId}.json`,
+      `https://raw.githubusercontent.com/ethereum-lists/chains/master/_data/chains/eip155-${this.client.chain!.id}.json`,
     );
 
     if (!response.ok) {
@@ -63,7 +70,7 @@ export class DefaultTokenInfoProvider implements TokenInfoProvider {
 
     if (!data.shortName) {
       console.error(
-        `Failed to retrieve chain shortName for ${this.network.chainId}`,
+        `Failed to retrieve chain shortName for ${this.client.chain!.id}`,
       );
       return undefined;
     }
@@ -75,10 +82,10 @@ export class DefaultTokenInfoProvider implements TokenInfoProvider {
 export class DefaultCollectibleTokenInfoProvider
   implements CollectibleTokenInfoProvider
 {
-  private network: Network;
+  private client: PublicClient;
 
   constructor(chainId: number) {
-    this.network = Network.fromChainId(chainId);
+    this.client = getPublicClient(chainId);
   }
 
   async getTokenInfo(
@@ -88,7 +95,7 @@ export class DefaultCollectibleTokenInfoProvider
     try {
       const address = getAddress(tokenAddress);
       // Assume ERC-721 by default; check balanceOf to determine if it's owned
-      const isERC721 = await this.network.client
+      const isERC721 = await this.client
         .readContract({
           address,
           abi: erc721Abi,
@@ -125,7 +132,7 @@ export class DefaultCollectibleTokenInfoProvider
     try {
       const uriMethod = token_type === "erc721" ? "tokenURI" : "uri";
 
-      const tokenURI: string = await this.network.client.readContract({
+      const tokenURI: string = await this.client.readContract({
         address: tokenAddress as Address,
         abi: [
           {
@@ -166,16 +173,16 @@ const universalResolverAddress = getAddress(
 );
 
 export class DefaultEnsResolver implements EnsResolver {
-  private network: Network;
+  private client: PublicClient;
 
   constructor(chainId: number) {
-    this.network = Network.fromChainId(chainId);
+    this.client = getPublicClient(chainId);
   }
 
   async resolveName(ensName: string): Promise<string | null> {
     if (ensName.endsWith(".eth")) {
       try {
-        const resolvedAddress = await this.network.client.getEnsAddress({
+        const resolvedAddress = await this.client.getEnsAddress({
           name: ensName,
           universalResolverAddress,
         });
@@ -191,7 +198,7 @@ export class DefaultEnsResolver implements EnsResolver {
   async lookupAddress(address: string): Promise<string | null> {
     try {
       return (
-        (await this.network.client.getEnsName({
+        (await this.client.getEnsName({
           address: getAddress(address),
           universalResolverAddress,
         })) || null
@@ -205,7 +212,7 @@ export class DefaultEnsResolver implements EnsResolver {
   async isEnsEnabled(): Promise<boolean> {
     try {
       // TODO(bh2smith): This is mainnet resolver address
-      const vitalik = await this.network.client.getEnsAddress({
+      const vitalik = await this.client.getEnsAddress({
         name: normalize("vitalik.eth"),
         universalResolverAddress,
       });
