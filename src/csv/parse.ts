@@ -10,9 +10,9 @@ import {
 } from "../provider";
 import type { CSVRow, CodeWarning } from "./common";
 import type { Transfer, UnknownTransfer } from "./transfer";
-import { parse, type ParseError } from "papaparse";
 import { validateHeaders, validateRow } from "./validate";
 import { transform } from "./transform";
+import Papa, { type ParseError } from "papaparse";
 
 const countLines = (text: string) => text.split(/\r\n|\r|\n/).length;
 
@@ -62,7 +62,7 @@ export async function parseCsv(
   }
 
   // Parse CSV
-  const parseResults = parse<CSVRow>(csvText, {
+  const parseResults = Papa.parse<CSVRow>(csvText, {
     header: true,
     skipEmptyLines: true,
   });
