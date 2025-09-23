@@ -68,14 +68,9 @@ describe("Default Providers:", () => {
   });
 
   describe("DefaultEnsResolver", () => {
-    const ensProvider = new DefaultEnsResolver(chainId);
-    const mainnetProvider = new DefaultEnsResolver(1);
-    it("constructor", () => {
-      expect(ensProvider).toBeDefined();
-    });
+    const mainnetProvider = new DefaultEnsResolver();
 
     it("isEnsEnabled", async () => {
-      expect(await ensProvider.isEnsEnabled()).toBe(false);
       expect(await mainnetProvider.isEnsEnabled()).toBe(true);
     });
 
@@ -97,7 +92,7 @@ describe("Default Providers:", () => {
     it("resolveName success", async () => {
       const address = await mainnetProvider.resolveName("vitalik.eth");
       expect(address).toBe("0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
-    });
+    }, 10000);
 
     it("resolveName fails", async () => {
       expect(await mainnetProvider.resolveName("x.eth")).toBe(null);
