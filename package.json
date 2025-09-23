@@ -33,21 +33,19 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "clean": "rm -rf dist",
     "lint": "prettier --check '{src,tests}/**/*.ts'",
-    "fmt": "prettier --write '{src,tests}/**/*.ts'",
-    "test": "jest"
+    "fmt": "prettier --write '{src,tests}/**/*.ts'"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/jest": "^29.5.14",
+    "@types/jest": "^30.0.0",
     "@types/papaparse": "^5.3.16",
-    "jest": "^29.7.0",
     "prettier": "^3.6.2"
   },
   "peerDependencies": {
-    "typescript": "^5.7.3"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "papaparse": "^5.5.3",
-    "viem": "^2.37.6"
+    "viem": "^2.37.8"
   }
 }
